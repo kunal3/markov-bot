@@ -2,37 +2,26 @@
 
 # TODO -
 # Add cmd line args
-# Add some sort of natural language processing for sensibl replies
+# Add some sort of natural language processing for sensible replies
 # Download discord history thru api
 
 import random
 import cPickle as pickle
 
 def main():
+	markovDepth = 2
+	# inputString = "My name is Kunal."
 	inputString = importTrainingSet("input/The Hunger Games.txt")
-	markovChain, startWords = create2WordDict(inputString)
+	markovChain, startWords = createMarkovChain(inputString, markovDepth)
 	pickleObject(markovChain, "brains/outputHungerGames.txt")
 	pickleObject(startWords, "startWords/outputHungerGames.txt")
 
 	# markovChain = unpickleObject("brains/outputHungerGames.txt")
 	# startWords = unpickleObject("startWords/outputHungerGames.txt")
 
-	print2WordRandom(markovChain, startWords)
+	printRandom(markovChain, startWords, markovDepth)
 
-
-def printRandom(markovChain):
-	start = random.choice(markovChain.keys())
-	reply = start
-	nextWord = start
-	
-	while reply[-1]!="." and reply[-1]!="!" and reply[-1]!="?":
-		nextWord = random.choice(markovChain[nextWord])
-		reply = reply + " " + nextWord
-	
-	print reply
-
-def print2WordRandom(markovChain, startWords):
-	# start = random.choice(markovChain.keys())
+def printRandom(markovChain, startWords, markovDepth):
 	start = random.choice(startWords)
 	reply = start
 	nextWord = start
@@ -43,40 +32,43 @@ def print2WordRandom(markovChain, startWords):
 		except KeyError:
 			nextWord = random.choice(markovChain.keys())
 		reply = reply + " " + nextWord
-		nextWord = reply.split()[-2] + " " + reply.split()[-1]
+		nextWord = " ".join(reply.split()[-markovDepth:])
 
 	print reply
 
-
-def createDict(inputString):
-	inputString = inputString.split()
-	markovChain = dict()
-	print len(inputString)
-
-	for i in range(0, len(inputString)-1):
-		word = inputString[i]
-		val = inputString[i+1]
-		if word not in markovChain:
-			markovChain[word] = []
-		markovChain[word].append(val)
-
-	return markovChain
-
-def create2WordDict(inputString):
+def createMarkovChain(inputString, markovDepth):
 	inputString = inputString.split()
 	markovChain = dict()
 	startWords = []
-	print len(inputString)
-	for i in range(0, len(inputString)-2):
-		word = inputString[i] + " " + inputString[i+1]
-		val = inputString[i+2]
 
-		if word[0].isupper():
-			startWords.append(word)
+	print "Corpus size = ", len(inputString)
+	
+	for i in range(0, len(inputString) - markovDepth):
 
-		if word not in markovChain:
-			markovChain[word] = []
-		markovChain[word].append(val)
+		# Define the key and value. This is done in a loop because
+		# you can change how many words form a key. For example -
+		# inputString = "My name is Kunal."
+		# markovDepth = 1
+		# Resulting Markov associations - 
+		# {'is': ['Kunal.'], 'My': ['name'], 'name': ['is']} 
+		# markovDepth = 2
+		# Resulting Markov associations - 		
+		# {'My name': ['is'], 'name is': ['Kunal.']}
+
+		key = ""
+		for j in range(i, i+markovDepth-1):
+			key = key + inputString[j] + " "
+		key = key + inputString[i+markovDepth-1]
+		val = inputString[i+markovDepth]
+
+		# This list is used to start sentences with Capital letters
+		if key[0].isupper():
+			startWords.append(key)
+
+		# Adding new key association to chain
+		if key not in markovChain:
+			markovChain[key] = []
+		markovChain[key].append(val)
 
 	return markovChain, startWords
 
