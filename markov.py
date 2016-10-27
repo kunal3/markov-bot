@@ -3,20 +3,19 @@
 # TODO -
 # Add cmd line args
 # Add some sort of natural language processing for sensibl replies
-# Add beginning of sentence as always being a Capital lettered word
 # Download discord history thru api
-# make brainHarryPotter.txt	
-# make brainLordOfTheRings.txt
 
 import random
 import cPickle as pickle
 
 def main():
-	inputString = importData("input/The Hunger Games.txt")
+	inputString = importTrainingSet("input/The Hunger Games.txt")
 	markovChain, startWords = create2WordDict(inputString)
-	exportDict(markovChain, "brains/outputHungerGames.txt")
+	pickleObject(markovChain, "brains/outputHungerGames.txt")
+	pickleObject(startWords, "startWords/outputHungerGames.txt")
 
-	# markovChain = importDict("brains/outputHungerGames.txt")
+	# markovChain = unpickleObject("brains/outputHungerGames.txt")
+	# startWords = unpickleObject("startWords/outputHungerGames.txt")
 
 	print2WordRandom(markovChain, startWords)
 
@@ -81,20 +80,19 @@ def create2WordDict(inputString):
 
 	return markovChain, startWords
 
-def importData(filename):
+def importTrainingSet(filename):
 	with open(filename, 'r') as myfile:
 		data = myfile.read().replace('\n', ' ')
 	return data
 
-def exportDict(markovChain, filename):
+def pickleObject(markovChain, filename):
 	output = open(filename, 'wb')
 	pickle.dump(markovChain, output)
 	output.close()
 
-def importDict(filename):
+def unpickleObject(filename):
 	output = open(filename, 'rb')
 	result = pickle.load(output)
-	# print result
 	return result
 
 main()
