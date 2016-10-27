@@ -1,18 +1,23 @@
 # Kunal's attempt at Markov bots
+
+# TODO -
+# Add cmd line args
+# Add some sort of natural language processing for sensibl replies
+# Add beginning of sentence as always being a Capital lettered word
+
 import random
 import cPickle as pickle
 
 def main():
-	inputString = "Hi my name is Kunal and I am a guy.\n	Hi i am jacob and i am a girl!"
-	inputString = importData("The Hunger Games.txt")
-	# inputString = importData("Sigmund Freud’s Dream Psychology.txt")
+	inputString = importData("input/The Hunger Games.txt")
+	# inputString = importData("Sigmund Freud's Dream Psychology.txt")
 
 	markovChain = createDict(inputString)
-	# markovChain = importDict("Hunger Games.txt")
+	# markovChain = importDict("brains/outputHungerGames.txt")
 
 	# print markovChain
 
-	exportDict(markovChain, "outputHungerGames.txt")
+	exportDict(markovChain, "brains/outputHungerGames2.txt")
 	# importDict("output.txt")
 
 	printRandom(markovChain)
@@ -32,17 +37,18 @@ def printRandom(markovChain):
 	print reply
 
 def createDict(inputString):
-	prevWasKey = 0
+	# Double for loop is bad way to do this. Can be done in single iteration. 
+
+	inputString = inputString.split()
 	markovChain = dict()
-	for word in inputString.split():
-		markovChain[word] = []
-		for val in inputString.split():
-			if prevWasKey:
-				prevWasKey = 0
-				markovChain[word].append(val)
-			if word==val:
-				prevWasKey = 1
-		prevWasKey = 0
+	print len(inputString)
+	for i in range(0, len(inputString)-1):
+		word = inputString[i]
+		val = inputString[i+1]
+		if word not in markovChain:
+			markovChain[word] = []
+		markovChain[word].append(val)
+
 	return markovChain
 
 def importData(filename):
@@ -51,7 +57,7 @@ def importData(filename):
 	return data
 
 def exportDict(markovChain, filename):
-	output = open(filename, 'ab+')
+	output = open(filename, 'wb')
 	pickle.dump(markovChain, output)
 	output.close()
 
