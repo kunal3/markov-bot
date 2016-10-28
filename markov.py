@@ -4,22 +4,24 @@
 # Add cmd line args
 # Add some sort of natural language processing for sensible replies
 # Download discord history thru api
+# Link to authorize my bot - https://discordapp.com/oauth2/authorize?&client_id=241600786470010881&scope=bot
 
 import random
-import cPickle as pickle
+import pickle
+import discord
 
 def main():
 	markovDepth = 2
 	# inputString = "My name is Kunal."
-	inputString = importTrainingSet("input/The Hunger Games.txt")
-	markovChain, startWords = createMarkovChain(inputString, markovDepth)
-	pickleObject(markovChain, "brains/outputHungerGames.txt")
-	pickleObject(startWords, "startWords/outputHungerGames.txt")
+	# inputString = importTrainingSet("input/The Hunger Games.txt")
+	# markovChain, startWords = createMarkovChain(inputString, markovDepth)
+	# pickleObject(markovChain, "brains/outputHungerGames.txt")
+	# pickleObject(startWords, "startWords/outputHungerGames.txt")
 
-	# markovChain = unpickleObject("brains/outputHungerGames.txt")
-	# startWords = unpickleObject("startWords/outputHungerGames.txt")
+	markovChain = unpickleObject("brains/outputHungerGames.txt")
+	startWords = unpickleObject("startWords/outputHungerGames.txt")
 
-	printRandom(markovChain, startWords, markovDepth)
+	return printRandom(markovChain, startWords, markovDepth)
 
 def printRandom(markovChain, startWords, markovDepth):
 	start = random.choice(startWords)
@@ -34,14 +36,12 @@ def printRandom(markovChain, startWords, markovDepth):
 		reply = reply + " " + nextWord
 		nextWord = " ".join(reply.split()[-markovDepth:])
 
-	print reply
+	return (reply)
 
 def createMarkovChain(inputString, markovDepth):
 	inputString = inputString.split()
 	markovChain = dict()
 	startWords = []
-
-	print "Corpus size = ", len(inputString)
 	
 	for i in range(0, len(inputString) - markovDepth):
 
@@ -87,4 +87,14 @@ def unpickleObject(filename):
 	result = pickle.load(output)
 	return result
 
-main()
+# Discord integration 
+client = discord.Client()
+
+@client.event
+async def on_message(message):
+    author = message.author
+    if message.content.startswith('<@241600786470010881>'):
+    	output = main()
+    	await client.send_message(message.channel, output)
+
+client.run("")
