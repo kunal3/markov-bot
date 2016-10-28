@@ -97,4 +97,6 @@ async def on_message(message):
     	output = main()
     	await client.send_message(message.channel, output)
 
-client.run("")
+tokenFile = open("token.txt", 'r')
+token = tokenFile.read()
+client.run(str(token))

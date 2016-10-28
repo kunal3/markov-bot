@@ -1,4 +1,4 @@
-Kunal Agrawal and Jeremy Meyer
+Kunal Agrawal 
 
 ------------------------------------------------------------------------------------
 
@@ -17,6 +17,7 @@ Resulting Markov associations -
 {'My name': ['is'], 'name is': ['Kunal.']}
 
 ------------------------------------------------------------------------------------
+(WORK IN PROGRESS)
 
 How we plan to have the markov brain talk about a subject :
 
@@ -39,4 +40,3 @@ for the first dictionary and building your forward sentence.
 Building the sentence backwards - 
 Since the backwards dictionary will always have keys with a depth of 1, 
 
-------------------------------------------------------------------------------------
