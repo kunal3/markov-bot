@@ -8,18 +8,19 @@
 
 import random
 import pickle
-import discord
 
-def main():
+def main(message):
 	markovDepth = 2
+	markovChain = {}
+	startWords = []
 	# inputString = "My name is Kunal."
 	# inputString = importTrainingSet("input/The Hunger Games.txt")
-	# markovChain, startWords = createMarkovChain(inputString, markovDepth)
-	# pickleObject(markovChain, "brains/outputHungerGames.txt")
-	# pickleObject(startWords, "startWords/outputHungerGames.txt")
-
-	markovChain = unpickleObject("brains/outputHungerGames.txt")
-	startWords = unpickleObject("startWords/outputHungerGames.txt")
+	inputString = message
+	markovChain = unpickleObject("brains/discordTest1.txt")
+	startWords = unpickleObject("startWords/discordTest1.txt")
+	markovChain, startWords = createMarkovChain(markovChain, startWords, inputString, markovDepth)
+	pickleObject(markovChain, "brains/discordTest1.txt")
+	pickleObject(startWords, "startWords/discordTest1.txt")
 
 	return printRandom(markovChain, startWords, markovDepth)
 
@@ -35,16 +36,14 @@ def printRandom(markovChain, startWords, markovDepth):
 			nextWord = random.choice(markovChain.keys())
 		reply = reply + " " + nextWord
 		nextWord = " ".join(reply.split()[-markovDepth:])
-
-	return (reply)
-
-def createMarkovChain(inputString, markovDepth):
-	inputString = inputString.split()
-	markovChain = dict()
-	startWords = []
 	
-	for i in range(0, len(inputString) - markovDepth):
+	# print (reply)
+	return reply
 
+def createMarkovChain(markovChain, startWords, inputString, markovDepth):
+	inputString = inputString.split()
+
+	for i in range(0, len(inputString) - markovDepth):
 		# Define the key and value. This is done in a loop because
 		# you can change how many words form a key. For example -
 		# inputString = "My name is Kunal."
@@ -87,16 +86,4 @@ def unpickleObject(filename):
 	result = pickle.load(output)
 	return result
 
-# Discord integration 
-client = discord.Client()
-
-@client.event
-async def on_message(message):
-    author = message.author
-    if message.content.startswith('<@241600786470010881>'):
-    	output = main()
-    	await client.send_message(message.channel, output)
-
-tokenFile = open("token.txt", 'r')
-token = tokenFile.read()
-client.run(str(token))
+# main("Mei is the best defense character. This is important, you need to remember it.")
