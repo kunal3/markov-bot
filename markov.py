@@ -1,11 +1,5 @@
 # Kunal's attempt at Markov bots
 
-# TODO -
-# Add cmd line args
-# Add some sort of natural language processing for sensible replies
-# Download discord history thru api
-# Link to authorize my bot - https://discordapp.com/oauth2/authorize?&client_id=241600786470010881&scope=bot
-
 import random
 import pickle
 
@@ -24,9 +18,12 @@ def main(message):
 
 	return printRandom(markovChain, startWords, markovDepth)
 
+# Picks a random starting word and follows it down the markov chain till it encounters
+# a period, exclamation or question mark. A starting word is defined as any word that 
+# begins with a capital letter.
 def printRandom(markovChain, startWords, markovDepth):
 	start = random.choice(startWords)
-	reply = start
+	reply = start 
 	nextWord = start
 	
 	while reply[-1]!="." and reply[-1]!="!" and reply[-1]!="?":
@@ -40,20 +37,20 @@ def printRandom(markovChain, startWords, markovDepth):
 	# print (reply)
 	return reply
 
+# Keys and values in the markov chain correspond to groups of words and the word
+# which most commonly follow them. Markov depth is the variable which dictates 
+# how many words are included in a group to form the key. For example -
+# inputString = "My name is Kunal."
+# markovDepth = 1
+# Resulting Markov associations - 
+# {'is': ['Kunal.'], 'My': ['name'], 'name': ['is']} 
+# markovDepth = 2
+# Resulting Markov associations - 		
+# {'My name': ['is'], 'name is': ['Kunal.']}
 def createMarkovChain(markovChain, startWords, inputString, markovDepth):
 	inputString = inputString.split()
 
 	for i in range(0, len(inputString) - markovDepth):
-		# Define the key and value. This is done in a loop because
-		# you can change how many words form a key. For example -
-		# inputString = "My name is Kunal."
-		# markovDepth = 1
-		# Resulting Markov associations - 
-		# {'is': ['Kunal.'], 'My': ['name'], 'name': ['is']} 
-		# markovDepth = 2
-		# Resulting Markov associations - 		
-		# {'My name': ['is'], 'name is': ['Kunal.']}
-
 		key = ""
 		for j in range(i, i+markovDepth-1):
 			key = key + inputString[j] + " "
