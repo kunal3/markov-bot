@@ -18,15 +18,15 @@ Resulting Markov associations -
 
 ------------------------------------------------------------------------------------
 
-# TODO -
-# Add cmd line args
-# Make it listen to everything everyone says, except the things it itself says. 
-# Break sentence on punctuations as well. Probably can just split on "\" ( ) /". But don't separate period because it will be nice to have knowledge of ends of sentences.
-# Add a 5% or something chance to respond to every message. random.randint(1,100)
-# Make smart responses by building a backwards markov chains.
-# Add a chance to respond with multiple sentences.
-# Add some sort of natural language processing for sensible replies
-# Link to authorize my bot - https://discordapp.com/oauth2/authorize?&client_id=241600786470010881&scope=bot
+TODO -
+- Add cmd line args
+- Make it listen to everything everyone says, except the things it itself says. 
+- Break sentence on punctuations as well. Probably can just split on "\" ( ) /". But don't separate period because it will be nice to have knowledge of ends of sentences.
+- Add a 5% or something chance to respond to every message. random.randint(1,100)
+- Make smart responses by building a backwards markov chains.
+- Add a chance to respond with multiple sentences.
+- Add some sort of natural language processing for sensible replies
+- Link to authorize my bot - https://discordapp.com/oauth2/authorize?&client_id=241600786470010881&scope=bot
 
 ------------------------------------------------------------------------------------
 
